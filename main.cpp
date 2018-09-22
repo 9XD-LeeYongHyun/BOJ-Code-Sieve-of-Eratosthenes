@@ -1,31 +1,38 @@
 #include <stdio.h>
-const int LIMIT = 1001;
-const int NOT_CHECKED = 0;
-const int CHECKED = 1;
-int arr[LIMIT] = {0, };
-int P = 2;
-int minAtArr(){
-	for(int i=P;i<LIMIT;++i){
-		if(arr[i] == NOT_CHECKED) return i;
-	}
-	return -1;
-}
-int main(void){
+#pragma warning(disable:4996)
+
+const int MIN = 2, MAX = 1000;
+bool isRemove[MAX + 1] = { true, };
+int removeCnt = 0;
+
+int main(void) {
+
+	int P = MIN, idx;
+
 	int n, k;
-	int count = 0;
-	scanf("%d %d",&n,&k);
-		while(P!=-1){
-			for(int i=P;i<=n;i+=P){
-				if(arr[i] == NOT_CHECKED){
-					arr[i] = CHECKED;
-					++count;
-					if(count == k){
-					printf("%d",i);
+
+	scanf("%d %d", &n, &k);
+
+	while (removeCnt < (n - MIN + 1)) {
+		
+		for (idx = P; idx <= n; idx += P) {
+			if (!isRemove[idx]) {
+				isRemove[idx] = true;
+				++removeCnt;
+				if (removeCnt == k) {
+					printf("%d", idx);
 					return 0;
-					}
 				}
 			}
-		P = minAtArr();
 		}
+
+		for (idx = P; idx <= MAX; ++idx) {
+			if (!isRemove[idx]) {
+				P = idx;
+				break;
+			}
+		}
+	}
+
 	return 0;
 }
